@@ -20,7 +20,6 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
-    Route::get('/produto', fn() => Inertia::render('Produto/Produto', [
-        'produtos' => app(ProductController::class)->index(),
-    ])->name('produto'));
+    Route::get('/produto', [ProductController::class, 'index'])->name('produto');
+
 });
