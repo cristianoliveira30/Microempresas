@@ -7,39 +7,20 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import FileNotFound from '@/Components/FileNotFound.vue';
-
-import { AgGridVue } from "ag-grid-vue3";
-import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import { ModuleRegistry } from '@ag-grid-community/core';
-import '@ag-grid-community/styles/ag-theme-alpine.css';
-
-// Registrar o módulo
-ModuleRegistry.registerModules([ClientSideRowModelModule]);
+import AgGridCustomProduto from '@/Components/AgGridCustomProduto.vue';
 
 
 const props = defineProps({
     user: Object,
     produto: Object,
 });
+const RowDataSent = ref([]);
 const form = useForm({
     _method: 'PUT',
     name: props.produto?.name || '',
     price: props.produto?.price || '',
     photo: null,
 });
-// Dados da tabela (pode começar vazio)
-const columnDefs = ref([
-  { field: 'nome', headerName: 'Nome', flex: 1 },
-  { field: 'preco', headerName: 'Preço', flex: 1 },
-  { field: 'categoria', headerName: 'Categoria', flex: 1 },
-]);
-const rowData = ref([
-  { nome: 'Produto A', preco: 100, categoria: 'Categoria 1' },
-  { nome: 'Produto B', preco: 200, categoria: 'Categoria 2' },
-]);
-const verificationLinkSent = ref(null);
 const photoPreview = ref(null);
 const photoInput = ref(null);
 const updateProfileInformation = () => {
@@ -123,27 +104,7 @@ const clearPhotoFileInput = () => {
             </div>
 
             <!-- Exibir tabela ag grid de produto -->
-            <div class="col-span-6">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Tabela de Produtos</h3>
-
-                <div v-if="rowData.length > 0" class="ag-theme-alpine-dark"
-                    style="width: 100%; height: 300px;">
-                    <AgGridVue
-                    :modules="[ClientSideRowModelModule]"
-                    :columnDefs="columnDefs"
-                    :rowData="rowData"
-                    class="ag-theme-alphine-dark"
-                    style="width: 100%; height: 300px;"
-                    />
-                </div>
-
-                <div v-else
-                    class="flex flex-col items-center justify-center h-48 text-center text-gray-400 dark:text-gray-500 border border-dashed rounded-lg border-gray-300 dark:border-gray-700">
-                    <FileNotFound />
-                </div>
-            </div>
-
-
+            <AgGridCustomProduto :row-sent="RowDataSent" />
         </template>
 
         <template #actions>
