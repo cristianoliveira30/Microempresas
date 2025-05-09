@@ -3,6 +3,15 @@ import AppLayout from '@/Layouts/AppLayout.vue';
 import AddProdutoForm from './Partials/AddProdutoForm.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
 import EditProdutoForm from './Partials/EditProdutoForm.vue';
+
+const props = defineProps({
+  produtos: {
+    type: Array,
+    default: () => []
+  }
+})
+
+console.log('Produtos recebidos:', props.produtos)
 </script>
 
 <template>
@@ -20,7 +29,7 @@ import EditProdutoForm from './Partials/EditProdutoForm.vue';
 
                     <SectionBorder />
 
-                    <EditProdutoForm :user="$page.props.auth.user" />
+                    <EditProdutoForm :user="$page.props.auth.user" :produtos="props.produtos"/>
                 </div>
             </div>
         </div>

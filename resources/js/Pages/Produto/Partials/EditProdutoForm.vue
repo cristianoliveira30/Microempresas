@@ -12,9 +12,9 @@ import AgGridCustomProduto from '@/Components/AgGridCustomProduto.vue';
 
 const props = defineProps({
     user: Object,
-    produto: Object,
+    produtos: Array,
 });
-const RowDataSent = ref([]);
+const RowDataSent = ref(props.produtos);
 const form = useForm({
     _method: 'PUT',
     name: props.produto?.name || '',

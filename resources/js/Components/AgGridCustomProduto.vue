@@ -14,6 +14,7 @@ const props = defineProps({
         default: () => []
     }
 });
+
 // Dados da tabela (pode começar vazio)
 const columnDefs = ref([
     {
@@ -56,6 +57,7 @@ const defaultColDef = {
     flex: 1,
     minWidth: 100,
 };
+
 // seta o row data e passa reatividade
 const rowData = ref(props.RowSent);
 
