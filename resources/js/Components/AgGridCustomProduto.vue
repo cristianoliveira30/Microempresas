@@ -9,39 +9,27 @@ import FileNotFound from './FileNotFound.vue';
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const props = defineProps({
-    RowSent: {
+    rowData: {
         type: Array,
         default: () => []
     }
-});
+})
 
-// Dados da tabela (pode começar vazio)
 const columnDefs = ref([
+    { field: 'name', headerName: 'Nome', flex: 1, editable: true },
+    { field: 'price', headerName: 'Preço', flex: 1, editable: true },
     {
-        field: 'nome',
-        headerName: 'Nome',
-        flex: 1,
-        editable: true,
-    },
-    {
-        field: 'preco',
-        headerName: 'Preço',
-        flex: 1,
-        editable: true,
-    },
-    {
-        field: 'categoria',
+        field: 'stock',
         headerName: 'Categoria',
         flex: 1,
         editable: true,
         cellEditor: 'agSelectCellEditor',
-        cellEditorParams:
-        {
+        cellEditorParams: {
             values: ['Alimento', 'Bebida', 'Indefinido']
         },
     },
     {
-        field: 'status',
+        field: 'is_active',
         headerName: 'Status',
         editable: true,
         cellEditor: 'agSelectCellEditor',
@@ -58,10 +46,6 @@ const defaultColDef = {
     minWidth: 100,
 };
 
-// seta o row data e passa reatividade
-const rowData = ref(props.RowSent);
-
-// define o tema do ag-grid
 const theme = ref(themeAlpine);
 
 // Evento ao editar células

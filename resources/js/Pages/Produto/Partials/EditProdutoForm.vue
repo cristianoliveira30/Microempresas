@@ -12,9 +12,13 @@ import AgGridCustomProduto from '@/Components/AgGridCustomProduto.vue';
 
 const props = defineProps({
     user: Object,
-    produtos: Array,
-});
-const RowDataSent = ref(props.produtos);
+    produtos: {
+        type: Array,
+        default: () => []
+    }
+})
+// Use `ref` reativo para passar ao AgGrid
+const rowData = ref([...props.produtos]) // cria cópia reativa para edição
 const form = useForm({
     _method: 'PUT',
     name: props.produto?.name || '',
@@ -104,7 +108,7 @@ const clearPhotoFileInput = () => {
             </div>
 
             <!-- Exibir tabela ag grid de produto -->
-            <AgGridCustomProduto :row-sent="RowDataSent" />
+            <AgGridCustomProduto :rowData="rowData" />
         </template>
 
         <template #actions>
