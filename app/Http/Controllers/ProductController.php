@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -19,7 +20,9 @@ class ProductController extends Controller
     {
         $products = $this->productService->listAll();
 
-        return response()->json($products);
+        return Inertia::render('Produto/Produto', [
+            'produtos' => $products,
+        ]);
     }
 
     // Cria um novo produto
