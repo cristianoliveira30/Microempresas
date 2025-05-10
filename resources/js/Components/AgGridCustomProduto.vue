@@ -15,18 +15,39 @@ const props = defineProps({
     }
 })
 
+const emit = defineEmits(['update:edits'])
+
+const edits = ref([]);
+
 const columnDefs = ref([
-    { field: 'name', headerName: 'Nome', flex: 1, editable: true },
-    { field: 'price', headerName: 'Preço', flex: 1, editable: true },
+    { field: 'id', headerName: 'ID', flex: 1 },
+    {
+        field: 'name', headerName: 'Nome', flex: 1, editable: true,
+        cellClassRules: {
+            'bg-green-200 dark:bg-teal-600': params =>
+                edits.value.some(e => e.id === params.data.id && e.field === 'name')
+        }
+    },
+    {
+        field: 'price', headerName: 'Preço', flex: 1, editable: true,
+        cellClassRules: {
+            'bg-green-200 dark:bg-teal-600': params =>
+                edits.value.some(e => e.id === params.data.id && e.field === 'price')
+        }
+    },
     {
         field: 'stock',
-        headerName: 'Categoria',
+        headerName: 'Estoque',
         flex: 1,
         editable: true,
         cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
             values: ['Alimento', 'Bebida', 'Indefinido']
         },
+        cellClassRules: {
+            'bg-green-200 dark:bg-teal-600': params =>
+                edits.value.some(e => e.id === params.data.id && e.field === 'stock')
+        }
     },
     {
         field: 'is_active',
@@ -35,9 +56,14 @@ const columnDefs = ref([
         cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
             values: ['Ativo', 'Inativo', 'Pendente'],
+        },
+        cellClassRules: {
+            'bg-green-200 dark:bg-teal-600': params =>
+                edits.value.some(e => e.id === params.data.id && e.field === 'is_active')
         }
     }
-]);
+])
+
 
 const defaultColDef = {
     editable: true,
@@ -50,10 +76,27 @@ const theme = ref(themeAlpine);
 
 // Evento ao editar células
 const onCellValueChanged = (event) => {
-  console.log('Coluna:', event.colDef.field)
-  console.log('Valor antigo:', event.oldValue)
-  console.log('Novo valor:', event.newValue)
-  console.log('Linha editada:', event.data)
+    const change = {
+        id: event.data.id,
+        field: event.colDef.field,
+        oldValue: event.oldValue,
+        newValue: event.newValue
+    }
+
+    if (change.oldValue === change.newValue) return
+
+    const index = edits.value.findIndex(e =>
+        e.id === change.id && e.field === change.field
+    )
+
+    if (index !== -1) {
+        edits.value[index].newValue = change.newValue
+    } else {
+        edits.value.push(change)
+    }
+
+    // Emite para o pai
+    emit('update:edits', edits.value)
 }
 
 onMounted(() => {
@@ -66,12 +109,8 @@ onMounted(() => {
         <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Tabela de Produtos</h3>
 
         <div v-if="rowData.length > 0" style="width: 100%; height: 300px;">
-            <AgGridVue 
-                :modules="[ClientSideRowModelModule]" 
-                :columnDefs="columnDefs" 
-                :rowData="rowData" 
-                :theme="theme"
-                @cell-value-changed="onCellValueChanged"
+            <AgGridVue :modules="[ClientSideRowModelModule]" :defaultColDef="defaultColDef" :columnDefs="columnDefs"
+                :rowData="rowData" :theme="theme" @cellValueChanged="onCellValueChanged"
                 style="width: 100%; height: 300px;" />
         </div>
 

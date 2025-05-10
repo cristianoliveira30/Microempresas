@@ -3,12 +3,9 @@ import { ref } from 'vue';
 import { router, useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import AgGridCustomProduto from '@/Components/AgGridCustomProduto.vue';
-
+import { showLoading, showSuccess, showError, showInfo } from '@/src/utils/alerts';
 
 const props = defineProps({
     user: Object,
@@ -18,57 +15,37 @@ const props = defineProps({
     }
 })
 // Use `ref` reativo para passar ao AgGrid
-const rowData = ref([...props.produtos]) // cria cópia reativa para edição
+const rowData = ref([...props.produtos]); // cria cópia reativa para edição
+const edits = ref([]);
 const form = useForm({
     _method: 'PUT',
-    name: props.produto?.name || '',
-    price: props.produto?.price || '',
-    photo: null,
+    name: props.produtos?.name || '',
+    price: props.produtos?.price || ''
 });
-const photoPreview = ref(null);
-const photoInput = ref(null);
-const updateProfileInformation = () => {
-    if (photoInput.value) {
-        form.photo = photoInput.value.files[0];
-    }
+const enviarAlteracoes = async () => {
+  if (edits.value.length === 0) {
+    showInfo('Nenhuma alteração', 'Você ainda não fez nenhuma edição.')
+    return
+  }
 
-    form.post(route('produtos.update', props.produto.id), { // <-- ajuste a rota conforme o nome da sua
-        errorBag: 'updateProfileInformation',
-        preserveScroll: true,
-        onSuccess: () => clearPhotoFileInput(),
-    });
-};
-const selectNewPhoto = () => {
-    photoInput.value.click();
-};
-const updatePhotoPreview = () => {
-    const photo = photoInput.value.files[0];
-    if (!photo) return;
+  try {
+    showLoading('Salvando alterações...')
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        photoPreview.value = e.target.result;
-    };
-    reader.readAsDataURL(photo);
-};
-const deletePhoto = () => {
-    router.delete(route('produto-photo.destroy', props.produto.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            photoPreview.value = null;
-            clearPhotoFileInput();
-        },
-    });
-};
-const clearPhotoFileInput = () => {
-    if (photoInput.value?.value) {
-        photoInput.value.value = null;
-    }
-};
+    await axios.post('/produtos/atualizar', {
+      updates: edits.value
+    })
+
+    edits.value = []
+    showSuccess('Alterações salvas!', 'Os dados foram atualizados com sucesso.')
+  } catch (error) {
+    console.error(error)
+    showError('Erro ao salvar', 'Verifique sua conexão ou tente novamente mais tarde.')
+  }
+}
 </script>
 
 <template>
-    <FormSection @submitted="updateProfileInformation">
+    <FormSection @submitted="enviarAlteracoes">
         <template #title>
             Editar Produto
         </template>
@@ -78,37 +55,8 @@ const clearPhotoFileInput = () => {
         </template>
 
         <template #form>
-            <!-- Profile Photo -->
-            <div v-if="$page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
-                <!-- Profile Photo File Input -->
-                <input id="photo" ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview">
-
-                <InputLabel for="photo" value="Photo" />
-
-                <!-- Current Profile Photo -->
-                <div v-show="!photoPreview" class="mt-2">
-                    <img :src="produto.photo_url" :alt="produto.name" class="rounded-full size-20 object-cover">
-                </div>
-
-                <!-- New Profile Photo Preview -->
-                <div v-show="photoPreview" class="mt-2">
-                    <span class="block rounded-full size-20 bg-cover bg-no-repeat bg-center"
-                        :style="'background-image: url(\'' + photoPreview + '\');'" />
-                </div>
-
-                <SecondaryButton class="mt-2 me-2" type="button" @click.prevent="selectNewPhoto">
-                    Select A New Photo
-                </SecondaryButton>
-
-                <SecondaryButton v-if="user.profile_photo_path" type="button" class="mt-2" @click.prevent="deletePhoto">
-                    Remove Photo
-                </SecondaryButton>
-
-                <InputError :message="form.errors.photo" class="mt-2" />
-            </div>
-
             <!-- Exibir tabela ag grid de produto -->
-            <AgGridCustomProduto :rowData="rowData" />
+            <AgGridCustomProduto :rowData="rowData" @update:edits="edits = $event" />
         </template>
 
         <template #actions>
@@ -116,7 +64,7 @@ const clearPhotoFileInput = () => {
                 Salvo
             </ActionMessage>
 
-            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+            <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing" >
                 Salvar
             </PrimaryButton>
         </template>

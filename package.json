@@ -26,6 +26,7 @@
         "@ag-grid-community/core": "^32.3.5",
         "@ag-grid-community/styles": "^32.3.5",
         "@ag-grid-community/vue3": "^32.3.5",
-        "ag-grid-vue3": "^33.2.4"
+        "ag-grid-vue3": "^33.2.4",
+        "sweetalert2": "^11.21.0"
     }
 }

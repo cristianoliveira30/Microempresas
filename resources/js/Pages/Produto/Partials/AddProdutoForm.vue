@@ -1,76 +1,61 @@
 <script setup>
-import { ref } from 'vue';
 import { router, useForm } from '@inertiajs/vue3';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import FormSection from '@/Components/FormSection.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import FloatInput from '@/Components/FloatInput.vue';
+import IntInput from '@/Components/IntInput.vue';
+import BoolSelect from '@/Components/BoolSelect.vue';
+import { showError, showInfo, showLoading, showSuccess } from '@/src/utils/alerts';
+import axios from 'axios';
 
 const props = defineProps({
-    user: Object,
     produto: Object,
 });
 
 const form = useForm({
-    _method: 'PUT',
-    name: props.produto?.name || '',
-    price: props.produto?.price || '',
-    photo: null,
-});
+    name: '',
+    price: 0.0,
+    stock: 0,
+    status: false,
+})
 
-const verificationLinkSent = ref(null);
-const photoPreview = ref(null);
-const photoInput = ref(null);
+const addProduto = async () => {
+    if (
+        form.name &&
+        form.price !== 0 &&
+        form.stock !== null &&
+        form.status !== null
+    ) {
+        try {
+            showLoading('Adicionando Produto...');
 
-const updateProfileInformation = () => {
-    if (photoInput.value) {
-        form.photo = photoInput.value.files[0];
+            await axios.post('/produtos/adicionar', {
+                insert: {
+                    name: form.name,
+                    price: form.price,
+                    stock: form.stock,
+                    status: form.status
+                }
+            });
+
+            showSuccess('Produto adicionado com sucesso!', 'Os dados foram adicionados com sucesso.');
+            form.reset(); // limpa os campos
+        } catch (error) {
+            console.error(error);
+            showError('Erro ao adicionar...', 'Verifique sua conexão ou tente novamente mais tarde.');
+        }
+    } else {
+        showInfo('Campo Incorreto', 'Por favor preencha corretamente os campos.');
     }
-
-    form.post(route('produtos.update', props.produto.id), { // <-- ajuste a rota conforme o nome da sua
-        errorBag: 'updateProfileInformation',
-        preserveScroll: true,
-        onSuccess: () => clearPhotoFileInput(),
-    });
-};
-
-const selectNewPhoto = () => {
-    photoInput.value.click();
-};
-
-const updatePhotoPreview = () => {
-    const photo = photoInput.value.files[0];
-    if (!photo) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        photoPreview.value = e.target.result;
-    };
-    reader.readAsDataURL(photo);
-};
-
-const deletePhoto = () => {
-    router.delete(route('produto-photo.destroy', props.produto.id), {
-        preserveScroll: true,
-        onSuccess: () => {
-            photoPreview.value = null;
-            clearPhotoFileInput();
-        },
-    });
-};
-
-const clearPhotoFileInput = () => {
-    if (photoInput.value?.value) {
-        photoInput.value.value = null;
-    }
-};
+}
 </script>
 
 <template>
-    <FormSection @submitted="updateProfileInformation">
+    <FormSection @submitted="addProduto">
         <template #title>
             Adicionar Produto
         </template>
@@ -80,75 +65,37 @@ const clearPhotoFileInput = () => {
         </template>
 
         <template #form>
-            <!-- Profile Photo -->
-            <div v-if="$page.props.jetstream.managesProfilePhotos" class="col-span-6 sm:col-span-4">
-                <!-- Profile Photo File Input -->
-                <input
-                    id="photo"
-                    ref="photoInput"
-                    type="file"
-                    class="hidden"
-                    @change="updatePhotoPreview"
-                >
-
-                <InputLabel for="photo" value="Photo" />
-
-                <!-- Current Profile Photo -->
-                <div v-show="! photoPreview" class="mt-2">
-                    <img :src="produto.photo_url" :alt="produto.name" class="rounded-full size-20 object-cover">
-                </div>
-
-                <!-- New Profile Photo Preview -->
-                <div v-show="photoPreview" class="mt-2">
-                    <span
-                        class="block rounded-full size-20 bg-cover bg-no-repeat bg-center"
-                        :style="'background-image: url(\'' + photoPreview + '\');'"
-                    />
-                </div>
-
-                <SecondaryButton class="mt-2 me-2" type="button" @click.prevent="selectNewPhoto">
-                    Selecionar uma foto
-                </SecondaryButton>
-
-                <SecondaryButton
-                    v-if="user.profile_photo_path"
-                    type="button"
-                    class="mt-2"
-                    @click.prevent="deletePhoto"
-                >
-                    Remover foto
-                </SecondaryButton>
-
-                <InputError :message="form.errors.photo" class="mt-2" />
-            </div>
 
             <!-- Name -->
             <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="name" value="Nome" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="name"
-                />
+                <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required
+                    autocomplete="name" />
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
 
             <!-- Price -->
             <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="price" value="Preço" />
-                <TextInput
-                    id="price"
-                    v-model="form.price"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="name"
-                />
+                <FloatInput id="price" v-model="form.price" class="mt-1 block w-full" required autocomplete="off" />
                 <InputError :message="form.errors.price" class="mt-2" />
             </div>
+
+            <!-- Stock -->
+            <div class="col-span-6 sm:col-span-4">
+                <InputLabel for="stock" value="Estoque" />
+                <IntInput id="stock" v-model="form.stock" class="mt-1 block w-full" required autocomplete="off" />
+                <InputError :message="form.errors.stock" class="mt-2" />
+            </div>
+
+            <!-- Status -->
+            <div class="col-span-6 sm:col-span-4">
+                <InputLabel for="status" value="Status" />
+                <BoolSelect id="status" v-model="form.status" trueLabel="Ativo" falseLabel="Inativo"
+                    class="mt-1 block w-full" />
+                <InputError :message="form.errors.status" class="mt-2" />
+            </div>
+
         </template>
 
         <template #actions>
