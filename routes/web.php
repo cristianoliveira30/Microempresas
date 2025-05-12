@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -21,4 +22,5 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
     Route::get('/produto', [ProductController::class, 'index'])->name('produto');
+    Route::get('/relatorio', [ReportController::class, 'index'])->name('relatorio');
 });

@@ -11,15 +11,15 @@ const emit = defineEmits(['confirmed']);
 defineProps({
     title: {
         type: String,
-        default: 'Confirm Password',
+        default: 'Confirme sua Senha',
     },
     content: {
         type: String,
-        default: 'For your security, please confirm your password to continue.',
+        default: 'Por segurança por favor confirme sua senha para continuar.',
     },
     button: {
         type: String,
-        default: 'Confirm',
+        default: 'Confirmar',
     },
 });
 
@@ -36,7 +36,7 @@ const passwordInput = ref(null);
 const startConfirmingPassword = () => {
     axios.get(route('password.confirmation')).then(response => {
         if (response.data.confirmed) {
-            emit('confirmed');
+            emit('confirmado');
         } else {
             confirmingPassword.value = true;
 
@@ -54,7 +54,7 @@ const confirmPassword = () => {
         form.processing = false;
 
         closeModal();
-        nextTick().then(() => emit('confirmed'));
+        nextTick().then(() => emit('confirmado'));
 
     }).catch(error => {
         form.processing = false;
@@ -90,7 +90,7 @@ const closeModal = () => {
                         v-model="form.password"
                         type="password"
                         class="mt-1 block w-3/4"
-                        placeholder="Password"
+                        placeholder="Senha"
                         autocomplete="current-password"
                         @keyup.enter="confirmPassword"
                     />
@@ -101,7 +101,7 @@ const closeModal = () => {
 
             <template #footer>
                 <SecondaryButton @click="closeModal">
-                    Cancel
+                    Cancelar
                 </SecondaryButton>
 
                 <PrimaryButton

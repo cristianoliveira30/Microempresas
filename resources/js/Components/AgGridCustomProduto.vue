@@ -20,7 +20,7 @@ const emit = defineEmits(['update:edits'])
 const edits = ref([]);
 
 const columnDefs = ref([
-    { field: 'id', headerName: 'ID', flex: 1 },
+    { field: 'id', headerName: 'ID', flex: 1, editable: false },
     {
         field: 'name', headerName: 'Nome', flex: 1, editable: true,
         cellClassRules: {

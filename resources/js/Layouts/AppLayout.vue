@@ -52,6 +52,18 @@ const logout = () => {
                                     Dashboard
                                 </NavLink>
                             </div>
+                            <!-- Navigation Links -->
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('produto')" :active="route().current('produto')">
+                                    Produto
+                                </NavLink>
+                            </div>
+                            <!-- Navigation Links -->
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('relatorio')" :active="route().current('relatorio')">
+                                    Relatório
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
@@ -74,16 +86,16 @@ const logout = () => {
                                         <div class="w-60">
                                             <!-- Team Management -->
                                             <div class="block px-4 py-2 text-xs text-gray-400">
-                                                Manage Team
+                                                Gerenciar Equipe
                                             </div>
 
                                             <!-- Team Settings -->
                                             <DropdownLink :href="route('teams.show', $page.props.auth.user.current_team)">
-                                                Team Settings
+                                                Configurações de Equipe
                                             </DropdownLink>
 
                                             <DropdownLink v-if="$page.props.jetstream.canCreateTeams" :href="route('teams.create')">
-                                                Create New Team
+                                                Criar nova equipe
                                             </DropdownLink>
 
                                             <!-- Team Switcher -->
@@ -91,7 +103,7 @@ const logout = () => {
                                                 <div class="border-t border-gray-200 dark:border-gray-600" />
 
                                                 <div class="block px-4 py-2 text-xs text-gray-400">
-                                                    Switch Teams
+                                                    Trocar de Equipe
                                                 </div>
 
                                                 <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
@@ -135,11 +147,11 @@ const logout = () => {
                                     <template #content>
                                         <!-- Account Management -->
                                         <div class="block px-4 py-2 text-xs text-gray-400">
-                                            Manage Account
+                                            Gerenciar Conta
                                         </div>
 
                                         <DropdownLink :href="route('profile.show')">
-                                            Profile
+                                            Perfil
                                         </DropdownLink>
 
                                         <DropdownLink v-if="$page.props.jetstream.hasApiFeatures" :href="route('api-tokens.index')">
@@ -151,7 +163,7 @@ const logout = () => {
                                         <!-- Authentication -->
                                         <form @submit.prevent="logout">
                                             <DropdownLink as="button">
-                                                Log Out
+                                                Sair
                                             </DropdownLink>
                                         </form>
                                     </template>
