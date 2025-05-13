@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\CaixaController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\VendaController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -23,4 +25,6 @@ Route::middleware([
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
     Route::get('/produto', [ProductController::class, 'index'])->name('produto');
     Route::get('/relatorio', [ReportController::class, 'index'])->name('relatorio');
+    Route::get('/venda', [VendaController::class, 'index'])->name('venda');
+    Route::get('/caixa', [CaixaController::class, 'index'])->name('caixa');
 });

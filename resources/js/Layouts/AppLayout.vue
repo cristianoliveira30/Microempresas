@@ -64,6 +64,18 @@ const logout = () => {
                                     Relatório
                                 </NavLink>
                             </div>
+                            <!-- Navigation Links -->
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('venda')" :active="route().current('venda')">
+                                    Venda
+                                </NavLink>
+                            </div>
+                            <!-- Navigation Links -->
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                                <NavLink :href="route('caixa')" :active="route().current('caixa')">
+                                    Caixa
+                                </NavLink>
+                            </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ms-6">

@@ -21,7 +21,7 @@ const rowData = ref([...props.vendas])
         </template>
 
         <template #description>
-            Veja aqui todas as vendas realizadas no período selecionado.
+            Veja aqui todas as vendas realizadas nos últimos 30 dias.
         </template>
 
         <template #form>

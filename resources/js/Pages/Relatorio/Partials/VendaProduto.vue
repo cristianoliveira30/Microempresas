@@ -21,7 +21,7 @@ const rowData = ref([...props.vendas])
         </template>
 
         <template #description>
-            Veja aqui todas as vendas de cada produto.
+            Veja aqui os 10 produtos mais vendidos.
         </template>
 
         <template #form>

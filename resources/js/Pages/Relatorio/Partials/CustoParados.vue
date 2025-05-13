@@ -21,7 +21,7 @@ const rowData = ref([...props.vendas])
         </template>
 
         <template #description>
-            Veja aqui todas as 10 vendas mais paradas.
+            Veja aqui os 10 produtos mais parados.
         </template>
 
         <template #form>

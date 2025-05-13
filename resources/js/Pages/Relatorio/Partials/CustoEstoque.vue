@@ -21,7 +21,7 @@ const rowData = ref([...props.vendas])
         </template>
 
         <template #description>
-            Veja aqui os 10 maiores custos por estoque no período selecionado.
+            Veja aqui as 10 maiores despesas do estoque.
         </template>
 
         <template #form>

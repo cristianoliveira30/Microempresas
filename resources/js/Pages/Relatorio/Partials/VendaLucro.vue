@@ -21,7 +21,7 @@ const rowData = ref([...props.vendas])
         </template>
 
         <template #description>
-            Veja quais produtos e quais períodos mais renderam lucro.
+            Veja os 10 produtos que mais geraram lucro.
         </template>
 
         <template #form>

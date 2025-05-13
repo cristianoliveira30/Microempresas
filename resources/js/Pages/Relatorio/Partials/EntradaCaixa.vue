@@ -21,7 +21,7 @@ const rowData = ref([...props.vendas])
         </template>
 
         <template #description>
-            Veja aqui todas as entradas de caixa.
+            Veja aqui a entrada de caixa dos últimos 30 dias.
         </template>
 
         <template #form>
