@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineExpose } from 'vue';
 import { AgGridVue } from "ag-grid-vue3";
 import { ModuleRegistry } from '@ag-grid-community/core';
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
@@ -16,9 +16,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:edits'])
-
 const edits = ref([]);
-
+const theme = ref(themeAlpine);
+const internalGridRef = ref(null);
 const columnDefs = ref([
     { field: 'id', headerName: 'ID', flex: 1, editable: false },
     {
@@ -62,18 +62,13 @@ const columnDefs = ref([
                 edits.value.some(e => e.id === params.data.id && e.field === 'is_active')
         }
     }
-])
-
-
+]);
 const defaultColDef = {
     editable: true,
     filter: true,
     flex: 1,
     minWidth: 100,
 };
-
-const theme = ref(themeAlpine);
-
 // Evento ao editar células
 const onCellValueChanged = (event) => {
     const change = {
@@ -98,10 +93,14 @@ const onCellValueChanged = (event) => {
     // Emite para o pai
     emit('update:edits', edits.value)
 }
-
+// Função reativa para expor `api` corretamente após estar carregada
+const getApi = () => internalGridRef.value?.api ?? null;
+defineExpose({
+    getApi
+});
 onMounted(() => {
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    theme.value = isDark ? themeAlpine.withPart(colorSchemeDarkBlue) : themeMaterial;
+    theme.value = isDark ? themeAlpine.withPart(colorSchemeDarkBlue) : themeAlpine;
 });
 </script>
 <template>
@@ -109,8 +108,14 @@ onMounted(() => {
         <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">Tabela de Produtos</h3>
 
         <div v-if="rowData.length > 0" style="width: 100%; height: 300px;">
-            <AgGridVue :modules="[ClientSideRowModelModule]" :defaultColDef="defaultColDef" :columnDefs="columnDefs"
-                :rowData="rowData" :theme="theme" @cellValueChanged="onCellValueChanged"
+            <AgGridVue 
+                :modules="[ClientSideRowModelModule]" 
+                :defaultColDef="defaultColDef" 
+                :columnDefs="columnDefs"
+                :rowData="rowData" 
+                :theme="theme" 
+                ref="internalGridRef" 
+                @cellValueChanged="onCellValueChanged"
                 style="width: 100%; height: 300px;" />
         </div>
 

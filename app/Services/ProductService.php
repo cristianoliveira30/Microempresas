@@ -31,4 +31,8 @@ class ProductService
     {
         return $this->productRepository->delete($id);
     }
+    public function listVenda()
+    {
+        return $this->productRepository->allVenda();
+    }
 }

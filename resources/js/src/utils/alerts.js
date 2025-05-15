@@ -17,7 +17,7 @@ const baseConfig = {
 }
 
 // 🔄 Loading (sem botão)
-export const showLoading = (title = 'Carregando...') => {
+export const showLoading = async (title = 'Carregando...') => {
   return Swal.fire({
     ...baseConfig,
     title,
@@ -31,7 +31,7 @@ export const showLoading = (title = 'Carregando...') => {
 }
 
 // ✅ Sucesso
-export const showSuccess = (title = 'Sucesso', text = '') => {
+export const showSuccess = async (title = 'Sucesso', text = '') => {
   return Swal.fire({
     ...baseConfig,
     icon: 'success',
@@ -45,7 +45,7 @@ export const showSuccess = (title = 'Sucesso', text = '') => {
 }
 
 // ❌ Erro
-export const showError = (title = 'Erro', text = 'Algo deu errado.') => {
+export const showError = async (title = 'Erro', text = 'Algo deu errado.') => {
   return Swal.fire({
     ...baseConfig,
     icon: 'error',
@@ -56,7 +56,7 @@ export const showError = (title = 'Erro', text = 'Algo deu errado.') => {
 }
 
 // ℹ️ Informação
-export const showInfo = (title = 'Informação', text = '') => {
+export const showInfo = async (title = 'Informação', text = '') => {
   return Swal.fire({
     ...baseConfig,
     icon: 'info',
@@ -67,6 +67,10 @@ export const showInfo = (title = 'Informação', text = '') => {
     toast: true,
     position: 'top-end'
   })
+}
+
+export const close = async () => {
+  await Swal.close();
 }
 
 // ⚠️ Confirmação

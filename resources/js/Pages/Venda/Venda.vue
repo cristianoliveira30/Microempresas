@@ -1,14 +1,16 @@
 <script setup>
+import { ref } from 'vue';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import SectionBorder from '@/Components/SectionBorder.vue';
-const props = defineProps({
-  produtos: {
-    type: Array,
-    default: () => []
-  }
-})
+import AddPedido from './Partials/AddPedido.vue';
 
-console.log('Produtos recebidos:', props.produtos)
+const props = defineProps({
+    produtos: {
+        type: Array,
+        default: () => []
+    }
+})
+const rowData = ref([...props.produtos])
 </script>
 
 <template>
@@ -21,8 +23,10 @@ console.log('Produtos recebidos:', props.produtos)
 
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <div v-if="$page.props.jetstream.canUpdateProfileInformation">
-                    <SectionBorder />
+                <div>
+                    <div class="margin-3">
+                        <AddPedido :produtos="rowData" />
+                    </div>
                 </div>
             </div>
         </div>

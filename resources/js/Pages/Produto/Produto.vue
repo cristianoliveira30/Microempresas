@@ -10,7 +10,6 @@ const props = defineProps({
     default: () => []
   }
 })
-
 console.log('Produtos recebidos:', props.produtos)
 </script>
 

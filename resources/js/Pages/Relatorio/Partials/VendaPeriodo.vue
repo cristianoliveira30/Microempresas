@@ -2,6 +2,9 @@
 import { ref } from 'vue';
 import FormSection from '@/Components/FormSection.vue';
 import AgGridVenda from '@/Components/AgGridVenda.vue';
+import ActionMessage from '@/Components/ActionMessage.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { exportGridToCsv } from '@/src/utils/exportGrid';
 
 const props = defineProps({
     vendas: {
@@ -12,6 +15,12 @@ const props = defineProps({
 
 // Cópia reativa da lista de vendas para o AgGrid
 const rowData = ref([...props.vendas])
+const csvExported = ref(false);
+const gridRef = ref(null);
+const exportToCsv = () => {
+    const api = gridRef.value?.getApi();
+    exportGridToCsv(api, 'produtos.csv');
+};
 </script>
 
 <template>
@@ -25,11 +34,16 @@ const rowData = ref([...props.vendas])
         </template>
 
         <template #form>
-            <AgGridVenda :rowData="rowData" reportName="Relatório Período"/>
+            <AgGridVenda :rowData="rowData" reportName="Relatório Período" ref="gridRef"/>
         </template>
 
         <template #actions>
-            <!-- Relatório apenas leitura, sem ações -->
+            <ActionMessage :on="csvExported" class="me-3">
+                Feito
+            </ActionMessage>
+            <SecondaryButton :class="{ 'opacity-25': csvExported }" @click="exportToCsv" ref="gridRef">
+                CSV
+            </SecondaryButton>
         </template>
     </FormSection>
 </template>
