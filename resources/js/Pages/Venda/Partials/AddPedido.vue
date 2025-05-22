@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import FormSection from '@/Components/FormSection.vue'
-import { showSuccess, showError, showLoading } from '@/src/utils/alerts'
+import { showSuccess, showError, showLoading, close } from '@/src/utils/alerts'
 import AgGridCustomPedido from '@/Components/AgGridCustomPedido.vue'
 
 const props = defineProps({
@@ -14,6 +14,11 @@ const props = defineProps({
 const produtoSelecionado = ref('')
 const listaProdutos = ref([])
 const formaPagamento = ref('pix')
+const calcularTotal = () => {
+    return listaProdutos.value.reduce((total, produto) => {
+        return total + (produto.price * produto.quantity)
+    }, 0).toFixed(2)
+}
 const addProduto = async () => {
     if (!produtoSelecionado.value) {
         showError('Erro', 'Selecione um produto para adicionar.')
@@ -38,7 +43,7 @@ const addProduto = async () => {
     produtoSelecionado.value = ''
 }
 const removerProduto = (id) => {
-  listaProdutos.value = listaProdutos.value.filter(p => p.id !== id)
+    listaProdutos.value = listaProdutos.value.filter(p => p.id !== id)
 }
 const enviarVenda = async () => {
     if (listaProdutos.value.length === 0) {
@@ -46,13 +51,23 @@ const enviarVenda = async () => {
         return
     }
 
-    showLoading('Aguarde', 'Enviando para o caixa...')
-
-    // Simular envio
-    setTimeout(() => {
-        showSuccess('Feito', 'Venda enviada para o caixa com sucesso!')
-        listaProdutos.value = []
-    }, 1000)
+    try {
+        const response = await axios.post(route('pedido.store'), {
+            total: calcularTotal(),
+            products: listaProdutos.value.map(p => ({
+                id: p.id,
+                name: p.name,
+                quantity: p.quantity,
+                price: p.price
+            }))
+        });
+        listaProdutos.value = [];
+        console.log(response)
+        await showSuccess('Pedido salvo!', 'Acesse o pedido no caixa!');
+    } catch (e) {
+        console.error(e);
+        await showError('Erro ao salvar o pedido.');
+    }
 }
 </script>
 
@@ -86,26 +101,33 @@ const enviarVenda = async () => {
             <div class="col-span-6">
                 <AgGridCustomPedido 
                     ref="gridRef" 
-                    :rowData="listaProdutos"
-                    @remove-produto="removerProduto" 
-                    @update:edits="edits = $event" 
-                />
+                    :rowData="listaProdutos" 
+                    @remove-produto="removerProduto"
+                    @update:edits="edits = $event" />
             </div>
 
             <!-- Bloco 3: Forma de Pagamento -->
             <div class="col-span-6">
                 <label class="block text-sm font-medium text-gray-300 dark:text-gray-100">Forma de Pagamento</label>
-                <div class="mt-2 space-x-4">
-                    <label class="inline-flex items-center">
-                        <input type="radio" value="dinheiro" v-model="formaPagamento"
-                            class="form-radio text-indigo-600 border-gray-600" />
-                        <span class="ml-2 dark:text-white">Dinheiro</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="radio" value="pix" v-model="formaPagamento"
-                            class="form-radio text-indigo-600 border-gray-600" />
-                        <span class="ml-2 dark:text-white">PIX</span>
-                    </label>
+                <div class="mt-2 flex justify-between items-center flex-wrap gap-4">
+                    <!-- Radios -->
+                    <div class="flex items-center space-x-4">
+                        <label class="inline-flex items-center">
+                            <input type="radio" value="dinheiro" v-model="formaPagamento"
+                                class="form-radio text-indigo-600 border-gray-600" />
+                            <span class="ml-2 dark:text-white">Dinheiro</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="radio" value="pix" v-model="formaPagamento"
+                                class="form-radio text-indigo-600 border-gray-600" />
+                            <span class="ml-2 dark:text-white">PIX</span>
+                        </label>
+                    </div>
+
+                    <!-- Total -->
+                    <span class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                        Total do Pedido: R$ {{ calcularTotal() }}
+                    </span>
                 </div>
             </div>
         </template>

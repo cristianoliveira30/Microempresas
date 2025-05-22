@@ -70,7 +70,7 @@ export const showInfo = async (title = 'Informação', text = '') => {
 }
 
 export const close = async () => {
-  await Swal.close();
+  Swal.close();
 }
 
 // ⚠️ Confirmação

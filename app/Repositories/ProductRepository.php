@@ -42,6 +42,6 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function allVenda()
     {
-        return Product::select('id', 'name', 'price', 'description')->get();
+        return Product::select('id', 'name', 'price')->get();
     }
 }

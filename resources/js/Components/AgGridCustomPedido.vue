@@ -16,14 +16,27 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['remove-produto']);
+const emit = defineEmits(['remove-produto', 'update:edits']);
 const edits = ref([]);
 const theme = ref(themeAlpine);
 const internalGridRef = ref(null);
 const columnDefs = ref([
   { field: 'id', headerName: 'ID', editable: false, flex: 1 },
   { field: 'name', headerName: 'Nome', editable: false, flex: 1 },
-  { field: 'description', headerName: 'Descrição', editable: false, flex: 1 },
+  { 
+    field: 'alcunha', 
+    headerName: 'Alcunha', 
+    editable: true, 
+    flex: 1,
+    valueParser: params => {
+      const val = params.newValue
+      return val <= 0 ? 'Sem Alcunha' : val
+    },
+    cellClassRules: {
+      'bg-green-200 dark:bg-teal-600': params =>
+        edits.value.some(e => e.id === params.data.id && e.field === 'alcunha')
+    }
+  },
   { field: 'price', headerName: 'Preço', editable: false, flex: 1 },
   {
     field: 'quantity',

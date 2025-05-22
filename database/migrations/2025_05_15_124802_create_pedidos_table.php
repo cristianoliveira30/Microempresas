@@ -9,10 +9,13 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
+            $table->string('alcunha')->nullable();
+            $table->decimal('total', 10, 2);
+            $table->enum('status', ['pendente', 'concluido'])->default('pendente');
             $table->timestamps();
         });
     }

@@ -22,9 +22,13 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+    // pages
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
     Route::get('/produto', [ProductController::class, 'index'])->name('produto');
     Route::get('/relatorio', [ReportController::class, 'index'])->name('relatorio');
     Route::get('/venda', [VendaController::class, 'index'])->name('venda');
     Route::get('/caixa', [CaixaController::class, 'index'])->name('caixa');
+
+    // methods
+    Route::post('/venda', [VendaController::class, 'store'])->name('pedido.store');
 });

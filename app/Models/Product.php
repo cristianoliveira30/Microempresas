@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+
+    public function pedidos()
+    {
+        return $this->belongsToMany(Pedido::class, 'pedido_produto')
+            ->withPivot('quantidade', 'preco_unitario')
+            ->withTimestamps();
+    }
 }

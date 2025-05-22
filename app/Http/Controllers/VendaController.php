@@ -4,14 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreVendaRequest;
 use App\Http\Requests\UpdateVendaRequest;
+use App\Models\Pedido;
 use App\Models\Venda;
 use App\Services\ProductService;
 use App\Services\VendaService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class VendaController extends Controller{
+class VendaController extends Controller
+{
     // Injeta a classe de serviço que lida com a lógica de negócio
-        public function __construct(
+    public function __construct(
         protected VendaService $vendaService,
         protected ProductService $productService
     ) {}
@@ -25,15 +28,22 @@ class VendaController extends Controller{
         ]);
     }
 
-    // Cria um novo produto
+    // Cria um novo pedido
     public function store(StoreVendaRequest $request)
     {
-        $venda = $this->vendaService->store($request->validated());
+        $pedido = Pedido::create([
+            'alcunha' => $request->alcunha,
+            'total' => $request->total,
+        ]);
 
-        return response()->json([
-            'message' => 'Venda created successfully.',
-            'venda' => $venda,
-        ], 201);
+        foreach ($request->products as $produto) {
+            $pedido->produtos()->attach($produto['id'], [
+                'quantity' => $produto['quantity'],
+                'unit_price' => $produto['price'],
+            ]);
+        }
+
+        return response()->json(['message' => 'Pedido salvo com sucesso.']);
     }
 
     // Atualiza um produto existente
