@@ -8,7 +8,9 @@ class Pedido extends Model
 {
     protected $fillable = [
         'alcunha',
-        'total'
+        'total',
+        'status',
+        'payment_method',
     ];
     public function produtos()
     {

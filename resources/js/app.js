@@ -5,10 +5,20 @@ import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import axios from 'axios';
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
+
+// axios csrf
+const token = document.head.querySelector('meta[name="csrf-token"]');
+if (token) {
+  axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+} else {
+  console.error('CSRF token not found');
+}
+axios.defaults.withCredentials = true; // importante para cookies
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

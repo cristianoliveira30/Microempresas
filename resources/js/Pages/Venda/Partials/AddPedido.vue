@@ -14,6 +14,7 @@ const props = defineProps({
 const produtoSelecionado = ref('')
 const listaProdutos = ref([])
 const formaPagamento = ref('pix')
+const alcunhaPedido = ref('') // <-- novo campo
 const calcularTotal = () => {
     return listaProdutos.value.reduce((total, produto) => {
         return total + (produto.price * produto.quantity)
@@ -53,6 +54,7 @@ const enviarVenda = async () => {
 
     try {
         const response = await axios.post(route('pedido.store'), {
+            alcunha: alcunhaPedido.value ? alcunhaPedido.value : 'Sem Identificação', // <-- só no pedido
             total: calcularTotal(),
             products: listaProdutos.value.map(p => ({
                 id: p.id,
@@ -62,10 +64,11 @@ const enviarVenda = async () => {
             }))
         });
         listaProdutos.value = [];
+        alcunhaPedido.value = '';
         console.log(response)
+        console.log('Pedido enviado com sucesso:', response.data);
         await showSuccess('Pedido salvo!', 'Acesse o pedido no caixa!');
     } catch (e) {
-        console.error(e);
         await showError('Erro ao salvar o pedido.');
     }
 }
@@ -83,6 +86,14 @@ const enviarVenda = async () => {
         </template>
 
         <template #form>
+            <!-- Campo Alcunha do Pedido -->
+            <div class="col-span-6">
+                <label class="block text-sm font-medium text-gray-300 dark:text-gray-100">Alcunha do Pedido</label>
+                <input v-model="alcunhaPedido" type="text"
+                    class="mt-1 block w-full bg-gray-100 dark:bg-gray-800 dark:text-white border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Nome do Pedido (opcional)">
+            </div>
+
             <!-- Bloco 1: Seleção de Produto -->
             <div class="col-span-6">
                 <label for="produto" class="block text-sm font-medium text-gray-300 dark:text-gray-100">Selecionar

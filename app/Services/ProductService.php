@@ -35,4 +35,26 @@ class ProductService
     {
         return $this->productRepository->allVenda();
     }
+    public function baixarEstoque($produtosVendidos) {
+        try {
+            foreach ($produtosVendidos as $produto) {
+                $produtoModel = $this->productRepository->find($produto['id']);
+                if ($produtoModel) {
+                    $novaQuantidade = max(0, $produtoModel->estoque - $produto['quantity']);
+                    $produtoModel->estoque = $novaQuantidade;
+                    $this->productRepository->update($produtoModel->id, ['stock' => $novaQuantidade]);
+                }
+            }
+            return [
+                'success' => true,
+                'message' => 'Estoque baixado com sucesso.'
+            ];
+        } catch (\Exception $th) {
+            return [
+                'success' => false,
+                'message' => 'Erro ao baixar o estoque.',
+                'error' => $th->getMessage()
+            ];
+        }
+    }
 }

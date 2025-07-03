@@ -47,14 +47,18 @@ class VendaController extends Controller
     }
 
     // Atualiza um produto existente
-    public function update(UpdateVendaRequest $request, Venda $venda)
+    public function update(UpdateVendaRequest $request, Pedido $pedido)
     {
-        $updatedVenda = $this->vendaService->update($venda, $request->validated());
-
-        return response()->json([
-            'message' => 'Venda updated successfully.',
-            'venda' => $updatedVenda,
-        ]);
+        try {
+            $updatedVenda = $this->vendaService->update($pedido->id, $request->validated());
+    
+            return response()->json([
+                'message' => 'Venda updated successfully.',
+                'venda' => $updatedVenda,
+            ]);
+        } catch (\Exception $e) {
+            throw new \Exception('Erro ao atualizar a venda: ' . $e->getMessage() . ' - ' . $e->getLine());
+        }
     }
 
     // Remove um produto

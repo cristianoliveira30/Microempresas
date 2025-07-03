@@ -1,10 +1,13 @@
 <script setup>
 import { Trash } from 'lucide-vue-next'
-defineProps(['data'])
-const emit = defineEmits(['remove'])
 
+const props = defineProps(['params'])
 const remover = () => {
-  emit('remove', data.id)
+  if (typeof props.params.onClick === 'function') {
+    props.params.onClick()
+  } else {
+    console.warn('onClick não definido em cellRendererParams')
+  }
 }
 </script>
 
