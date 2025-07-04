@@ -10,9 +10,19 @@ class ReportService
         protected ReportRepositoryInterface $reportRepository
     ) {}
 
-    public function listAll()
+    public function listAll(): array 
     {
-        return $this->reportRepository->all();
+        return 
+        [
+            'vendaPeriodo'          =>  $this->reportRepository->getVendaPeriodo(),
+            'vendaProduto'          =>  $this->reportRepository->getVendaProduto(),
+            'gestaoLucro'           =>  $this->reportRepository->getGestaoLucro(),
+            'entrada'               =>  $this->reportRepository->getEntrada(),
+            'vendaparada'           =>  $this->reportRepository->getVendaParada(),
+            'custoestoque'          =>  $this->reportRepository->getCustoEstoque(),
+            'historicoalteracao'    =>  $this->reportRepository->getHistoricoProduto(),
+            'saida'                 =>  $this->reportRepository->getSaida(),
+        ];
     }
 
     public function findById($id)

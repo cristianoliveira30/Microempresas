@@ -1,19 +1,20 @@
 <script setup>
 import { ref } from 'vue';
 import FormSection from '@/Components/FormSection.vue';
-import AgGridVenda from '@/Components/AgGridVenda.vue';
 import ActionMessage from '@/Components/ActionMessage.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { exportGridToCsv } from '@/src/utils/exportGrid';
+import AgGridVendaSaida from '@/Components/AgGridVendaSaida.vue';
 
 const props = defineProps({
-    vendas: {
+    data: {
         type: Array,
         default: () => []
     }
 })
+console.log('Saida recebida:', props.data);
 // Cópia reativa da lista de vendas para o AgGrid
-const rowData = ref([...props.vendas])
+const rowData = ref([...props.data])
 const csvExported = ref(false);
 const gridRef = ref(null);
 const exportToCsv = () => {
@@ -34,7 +35,7 @@ const exportToCsv = () => {
         </template>
 
         <template #form>
-            <AgGridVenda :rowData="rowData" reportName="Saída de Caixa"/>
+            <AgGridVendaSaida :rowData="rowData" reportName="Saída de Caixa"/>
         </template>
 
         <template #actions>

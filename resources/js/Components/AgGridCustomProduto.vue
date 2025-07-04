@@ -40,10 +40,6 @@ const columnDefs = ref([
         headerName: 'Estoque',
         flex: 1,
         editable: true,
-        cellEditor: 'agSelectCellEditor',
-        cellEditorParams: {
-            values: ['Alimento', 'Bebida', 'Indefinido']
-        },
         cellClassRules: {
             'bg-green-200 dark:bg-teal-600': params =>
                 edits.value.some(e => e.id === params.data.id && e.field === 'stock')

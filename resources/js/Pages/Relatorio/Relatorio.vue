@@ -14,10 +14,17 @@ const props = defineProps({
   produtos: {
     type: Array,
     default: () => []
+  },
+  positivos: {
+    type: Object,
+    default: () => []
+  },
+  negativos: {
+    type: Object,
+    default: () => []
   }
 })
-
-console.log('Produtos recebidos:', props.produtos)
+console.log('Parametros recebidos:', props.produtos, props.positivos, props.negativos);
 </script>
 
 <template>
@@ -36,25 +43,33 @@ console.log('Produtos recebidos:', props.produtos)
 
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <VendaPeriodo />
+                <VendaPeriodo
+                :data="props.positivos.vendaperiodo" 
+                />
             </div>
         </div>
         <SectionBorder />
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <VendaProduto />
+                <VendaProduto 
+                :data="props.positivos.vendaproduto"
+                />
             </div>
         </div>
         <SectionBorder />
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <VendaLucro />
+                <VendaLucro 
+                :data="props.positivos.gestaolucro"
+                />
             </div>
         </div>
         <SectionBorder />
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <EntradaCaixa />
+                <EntradaCaixa 
+                :data="props.positivos.entrada"
+                />
             </div>
         </div>
         <SectionBorder />
@@ -67,25 +82,33 @@ console.log('Produtos recebidos:', props.produtos)
 
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <SaidaCaixa />
+                <SaidaCaixa 
+                :data="props.negativos.saida"
+                />
             </div>
         </div>
         <SectionBorder />
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <CustoParados />
+                <CustoParados 
+                :data="props.negativos.vendaparada"
+                />
             </div>
         </div>
         <SectionBorder />
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <CustoEstoque />
+                <CustoEstoque 
+                :data="props.negativos.custoestoque"
+                />
             </div>
         </div>
         <SectionBorder />
         <div>
             <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-                <HistoricoAlteracaoProdutos />
+                <HistoricoAlteracaoProdutos 
+                :data="props.negativos.historicoalteracao"
+                />
             </div>
         </div>
         <SectionBorder />
