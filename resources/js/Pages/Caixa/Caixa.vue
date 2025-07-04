@@ -1,8 +1,6 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
-import SectionBorder from '@/Components/SectionBorder.vue';
 import AgGridCustomCaixa from '@/Components/AgGridCustomCaixa.vue';
-import FinalizarPedido from '../../Components/Modals/FinalizarPedido.vue';
 import { ref } from 'vue';
 
 const props = defineProps({

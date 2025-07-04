@@ -19,7 +19,7 @@ const csvExported = ref(false);
 const gridRef = ref(null);
 const exportToCsv = () => {
     const api = gridRef.value?.getApi();
-    exportGridToCsv(api, 'produtos.csv');
+    exportGridToCsv(api, 'RelatorioVendaLucro.csv');
 };
 </script>
 
@@ -34,14 +34,14 @@ const exportToCsv = () => {
         </template>
 
         <template #form>
-            <AgGridVendaLucro :rowData="rowData" reportName="Relatório Lucrativo"/>
+            <AgGridVendaLucro :rowData="rowData" reportName="Relatório Lucrativo" ref="gridRef"/>
         </template>
 
         <template #actions>
             <ActionMessage :on="csvExported" class="me-3">
                 Feito
             </ActionMessage>
-            <SecondaryButton :class="{ 'opacity-25': csvExported }" @click="exportToCsv" ref="gridRef">
+            <SecondaryButton :class="{ 'opacity-25': csvExported }" @click="exportToCsv">
                 CSV
             </SecondaryButton>
         </template>

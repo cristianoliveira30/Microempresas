@@ -18,7 +18,9 @@ const props = defineProps({
 
 const form = useForm({
     name: '',
+    description: '',
     price: 0.0,
+    cost_price: 0.0,
     stock: 0,
     status: false,
 })
@@ -26,7 +28,9 @@ const form = useForm({
 const addProduto = async () => {
     if (
         form.name &&
+        form.description &&
         form.price !== 0 &&
+        form.cost_price !== 0 &&
         form.stock !== null &&
         form.status !== null
     ) {
@@ -34,16 +38,16 @@ const addProduto = async () => {
             showLoading('Adicionando Produto...');
 
             await axios.post('/produtos/adicionar', {
-                insert: {
-                    name: form.name,
-                    price: form.price,
-                    stock: form.stock,
-                    status: form.status
-                }
+                name: form.name,
+                description: form.description,
+                price: form.price,
+                cost_price: form.cost_price,
+                stock: form.stock,
+                is_active: form.status == true ? 1 : 0
             });
 
             showSuccess('Produto adicionado com sucesso!', 'Os dados foram adicionados com sucesso.');
-            form.reset(); // limpa os campos
+            location.reload();
         } catch (error) {
             console.error(error);
             showError('Erro ao adicionar...', 'Verifique sua conexão ou tente novamente mais tarde.');
@@ -74,11 +78,25 @@ const addProduto = async () => {
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
 
+            <!-- Description -->
+            <div class="col-span-6 sm:col-span-4">
+                <InputLabel for="description" value="Descrição" />
+                <TextInput id="description" v-model="form.description" type="text" class="mt-1 block w-full" required autocomplete="off" />
+                <InputError :message="form.errors.description" class="mt-2" />
+            </div>
+
             <!-- Price -->
             <div class="col-span-6 sm:col-span-4">
                 <InputLabel for="price" value="Preço" />
                 <FloatInput id="price" v-model="form.price" class="mt-1 block w-full" required autocomplete="off" />
                 <InputError :message="form.errors.price" class="mt-2" />
+            </div>
+
+            <!-- Cost Price -->
+            <div class="col-span-6 sm:col-span-4">
+                <InputLabel for="cost_price" value="Custo" />
+                <FloatInput id="cost_price" v-model="form.cost_price" class="mt-1 block w-full" required autocomplete="off" />
+                <InputError :message="form.errors.cost_price" class="mt-2" />
             </div>
 
             <!-- Stock -->

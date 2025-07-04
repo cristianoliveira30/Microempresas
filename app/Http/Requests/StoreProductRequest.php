@@ -9,14 +9,12 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // Nome obrigatório, texto, no máximo 255 caracteres
             'name' => 'required|string|max:255',
-
-            // Preço obrigatório, valor numérico, no mínimo 0
-            'price' => 'required|numeric|min:0',
-
-            // Estoque obrigatório, inteiro, no mínimo 0
+            'description' => 'required|string|max:255', // novo campo
+            'price' => 'required|numeric|min:1',
+            'cost_price' => 'required|numeric|min:1',
             'stock' => 'required|integer|min:0',
+            'is_active' => 'required|integer|min:0',
         ];
     }
 }

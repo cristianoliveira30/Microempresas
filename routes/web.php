@@ -32,11 +32,13 @@ Route::middleware([
 
     // data
     Route::get('/pedidos/data', [CaixaController::class, 'getPedidoData'])->name('pedidos.data'); // envia pedidos pendentes
-    Route::post('/pedido/pagar/{id}', [CaixaController::class, 'pagarPedido'])->name('pedido.pagar'); // paga pedido
-
+    
     // methods
+    Route::post('/produtos/adicionar', [ProductController::class, 'store'])->name('produtos.store'); // insere produtos
+    Route::put('/produtos/batch-update', [ProductController::class, 'batchUpdate'])->name('produtos.batchUpdate'); // atualiza produtos
     Route::post('/venda', [VendaController::class, 'store'])->name('pedido.store'); // insere pedidos
     Route::post('/venda/{pedido}', [VendaController::class, 'update'])->name('pedido.update'); // atualiza pedidos
+    Route::post('/pedido/pagar/{id}', [CaixaController::class, 'pagarPedido'])->name('pedido.pagar'); // paga pedido
     Route::delete('/caixa/pedido/{pedido}/produto/{produto}', [CaixaController::class, 'destroyProdutoPedido'])->name('pedido.produto.destroy'); // deleta pedidos
 
     //tests

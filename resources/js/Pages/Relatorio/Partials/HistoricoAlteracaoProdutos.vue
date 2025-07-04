@@ -19,30 +19,29 @@ const csvExported = ref(false);
 const gridRef = ref(null);
 const exportToCsv = () => {
     const api = gridRef.value?.getApi();
-    exportGridToCsv(api, 'produtos.csv');
+    exportGridToCsv(api, 'RelatorioHistoricoAlteracaoProduto.csv');
 };
-
 </script>
 
 <template>
     <FormSection>
         <template #title>
-            Histórico de Alteração de Produtos
+            Histórico de Produtos
         </template>
 
         <template #description>
-            Veja aqui as alterações de Produtos dos últimos 30 dias.
+            Veja aqui as alterações e adições de Produtos dos últimos 30 dias.
         </template>
 
         <template #form>
-            <AgGridVendaHistorico :rowData="rowData" reportName="Histórico Alteração Produto"/>
+            <AgGridVendaHistorico :rowData="rowData" reportName="Histórico Alteração Produto" ref="gridRef"/>
         </template>
 
         <template #actions>
             <ActionMessage :on="csvExported" class="me-3">
                 Feito
             </ActionMessage>
-            <SecondaryButton :class="{ 'opacity-25': csvExported }" @click="exportToCsv" ref="gridRef">
+            <SecondaryButton :class="{ 'opacity-25': csvExported }" @click="exportToCsv">
                 CSV
             </SecondaryButton>
         </template>

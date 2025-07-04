@@ -8,6 +8,7 @@ import AgGridCustomProduto from '@/Components/AgGridCustomProduto.vue';
 import { showLoading, showSuccess, showError, showInfo } from '@/src/utils/alerts';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 import { exportGridToCsv } from '@/src/utils/exportGrid';
+import axios from 'axios';
 
 const props = defineProps({
     user: Object,
@@ -39,9 +40,9 @@ const enviarAlteracoes = async () => {
     try {
         showLoading('Salvando alterações...')
 
-        await axios.post('/produtos/atualizar', {
-            updates: edits.value
-        })
+        await axios.put(route('produtos.batchUpdate'), {
+            edits: edits.value
+        });
 
         edits.value = []
         showSuccess('Alterações salvas!', 'Os dados foram atualizados com sucesso.')

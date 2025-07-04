@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Services\ProductService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -20,6 +21,10 @@ class ProductController extends Controller
     {
         $products = $this->productService->listAll();
 
+        foreach ($products as $product) {
+            $product->is_active = $product->is_active == 1 ? 'Ativo' : 'Inativo';
+        }
+
         return Inertia::render('Produto/Produto', [
             'produtos' => $products,
         ]);
@@ -27,24 +32,28 @@ class ProductController extends Controller
 
     // Cria um novo produto
     public function store(StoreProductRequest $request)
-    {
-        $product = $this->productService->store($request->validated());
+    { 
+        $data = $request->validated();
+        $product = $this->productService->store($data);
 
         return response()->json([
-            'message' => 'Product created successfully.',
+            'message' => 'Produto criado com sucesso.',
             'product' => $product,
         ], 201);
     }
 
     // Atualiza um produto existente
-    public function update(UpdateProductRequest $request, Product $product)
+    public function batchUpdate(Request $request)
     {
-        $updatedProduct = $this->productService->update($product, $request->validated());
-
-        return response()->json([
-            'message' => 'Product updated successfully.',
-            'product' => $updatedProduct,
-        ]);
+        $edits = $request->input('edits', []);
+        foreach ($edits as $edit) {
+            $product = Product::find($edit['id']);
+            if ($product && in_array($edit['field'], ['name', 'price', 'cost_price', 'description', 'stock', 'is_active'])) {
+                $product->{$edit['field']} = $edit['newValue'];
+                $product->save();
+            }
+        }
+        return response()->json(['message' => 'Produtos atualizados com sucesso.']);
     }
 
     // Remove um produto

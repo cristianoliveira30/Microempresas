@@ -16,7 +16,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['remove-produto', 'update:edits']);
+const emit = defineEmits(['remove-produto', 'update:edits', 'update:rowData']);
 const edits = ref([]);
 const theme = ref(themeAlpine);
 const internalGridRef = ref(null);
@@ -55,10 +55,10 @@ const defaultColDef = {
 };
 const onCellValueChanged = (event) => {
   const field = event.colDef.field
-  if (field === 'quantidade') {
+  if (field === 'quantity') {
     const novaQtd = parseInt(event.newValue)
     if (isNaN(novaQtd) || novaQtd <= 0) {
-      event.node.setDataValue('quantidade', event.oldValue)
+      event.node.setDataValue('quantity', event.oldValue)
       alert('A quantidade deve ser maior que zero.')
       return
     }
@@ -79,6 +79,7 @@ const onCellValueChanged = (event) => {
     edits.value.push(change) 
   }
   emit('update:edits', edits.value)
+  emit('update:rowData', props.rowData)
 }
 const getApi = () => internalGridRef.value?.api ?? null;
 defineExpose({ getApi });

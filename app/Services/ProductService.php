@@ -23,8 +23,9 @@ class ProductService
     {
         return $this->productRepository->create($data);
     }
-    public function update($id, array $data)
+    public function update($productOrId, array $data)
     {
+        $id = is_object($productOrId) ? $productOrId->id : $productOrId;
         return $this->productRepository->update($id, $data);
     }
     public function destroy($id)

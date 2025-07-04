@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import FormSection from '@/Components/FormSection.vue'
 import { showSuccess, showError, showLoading, close } from '@/src/utils/alerts'
@@ -13,13 +13,12 @@ const props = defineProps({
 });
 const produtoSelecionado = ref('')
 const listaProdutos = ref([])
-const formaPagamento = ref('pix')
 const alcunhaPedido = ref('') // <-- novo campo
-const calcularTotal = () => {
+const totalPedido = computed(() => {
     return listaProdutos.value.reduce((total, produto) => {
         return total + (produto.price * produto.quantity)
     }, 0).toFixed(2)
-}
+})
 const addProduto = async () => {
     if (!produtoSelecionado.value) {
         showError('Erro', 'Selecione um produto para adicionar.')
@@ -55,7 +54,7 @@ const enviarVenda = async () => {
     try {
         const response = await axios.post(route('pedido.store'), {
             alcunha: alcunhaPedido.value ? alcunhaPedido.value : 'Sem Identificação', // <-- só no pedido
-            total: calcularTotal(),
+            total: totalPedido.value,
             products: listaProdutos.value.map(p => ({
                 id: p.id,
                 name: p.name,
@@ -114,30 +113,18 @@ const enviarVenda = async () => {
                     ref="gridRef" 
                     :rowData="listaProdutos" 
                     @remove-produto="removerProduto"
-                    @update:edits="edits = $event" />
+                    @update:edits="edits = $event"
+                    @update:rowData="listaProdutos = [...$event]" />
             </div>
 
             <!-- Bloco 3: Forma de Pagamento -->
             <div class="col-span-6">
                 <label class="block text-sm font-medium text-gray-300 dark:text-gray-100">Forma de Pagamento</label>
                 <div class="mt-2 flex justify-between items-center flex-wrap gap-4">
-                    <!-- Radios -->
-                    <div class="flex items-center space-x-4">
-                        <label class="inline-flex items-center">
-                            <input type="radio" value="dinheiro" v-model="formaPagamento"
-                                class="form-radio text-indigo-600 border-gray-600" />
-                            <span class="ml-2 dark:text-white">Dinheiro</span>
-                        </label>
-                        <label class="inline-flex items-center">
-                            <input type="radio" value="pix" v-model="formaPagamento"
-                                class="form-radio text-indigo-600 border-gray-600" />
-                            <span class="ml-2 dark:text-white">PIX</span>
-                        </label>
-                    </div>
 
                     <!-- Total -->
                     <span class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                        Total do Pedido: R$ {{ calcularTotal() }}
+                        Total do Pedido: R$ {{ totalPedido }}
                     </span>
                 </div>
             </div>

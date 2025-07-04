@@ -14,7 +14,8 @@ const props = defineProps({
 const columnDefs = ref([
     { field: 'id', headerName: 'ID', sortable: true, flex: 1, filter: true },
     { field: 'name', headerName: 'Produto', sortable: true, flex: 1, filter: true },
-    { field: 'description', headerName: 'Quantidade', sortable: true,  flex: 1},
+    { field: 'description', headerName: 'Descrição', sortable: true,  flex: 1},
+    { field: 'modificacao', headerName: 'Data Mod.', sortable: true,  flex: 1},
     { field: 'price', headerName: 'Preço', sortable: true,  flex: 1},
     { field: 'cost_price', headerName: 'Custo', sortable: true,  flex: 1},
     { field: 'stock', headerName: 'Estoque', sortable: true,  flex: 1},
@@ -25,12 +26,9 @@ const defaultColDef = {
     minWidth: 100,
 };
 const theme = ref(themeAlpine);
-const api = ref(null);
-// Função reativa para expor `api` corretamente após estar carregada
-const onGridReady = (params) => api.value ? api.value = params.api : null;
-defineExpose({
-    getApi: () => api.value
-});
+const agGridRef = ref(null);
+const getApi = () => agGridRef.value?.api ?? null;
+defineExpose({ getApi });
 onMounted(() => {
     const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     theme.value = isDark ? themeAlpine.withPart(colorSchemeDarkBlue) : themeMaterial;
@@ -47,7 +45,6 @@ onMounted(() => {
                     :columnDefs="columnDefs"
                     :rowData="rowData"
                     :theme="theme"
-                    @grid-ready="onGridReady"
                     ref="agGridRef"
                     style="width: 100%; height: 300px;"
                 />

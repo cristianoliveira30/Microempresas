@@ -26,7 +26,10 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product = $this->find($id);
         if ($product) {
-            return $product->update($data);
+            // Apenas os campos permitidos
+            $allowed = ['name', 'price', 'cost_price', 'description', 'stock', 'is_active'];
+            $updateData = array_intersect_key($data, array_flip($allowed));
+            return $product->update($updateData);
         }
         return false;
     }

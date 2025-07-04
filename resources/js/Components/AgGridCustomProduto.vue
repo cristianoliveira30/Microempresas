@@ -29,7 +29,21 @@ const columnDefs = ref([
         }
     },
     {
+        field: 'description', headerName: 'Descrição', flex: 1, editable: true,
+        cellClassRules: {
+            'bg-green-200 dark:bg-teal-600': params =>
+                edits.value.some(e => e.id === params.data.id && e.field === 'name')
+        }
+    },
+    {
         field: 'price', headerName: 'Preço', flex: 1, editable: true,
+        cellClassRules: {
+            'bg-green-200 dark:bg-teal-600': params =>
+                edits.value.some(e => e.id === params.data.id && e.field === 'price')
+        }
+    },
+    {
+        field: 'cost_price', headerName: 'Custo', flex: 1, editable: true,
         cellClassRules: {
             'bg-green-200 dark:bg-teal-600': params =>
                 edits.value.some(e => e.id === params.data.id && e.field === 'price')
@@ -51,7 +65,7 @@ const columnDefs = ref([
         editable: true,
         cellEditor: 'agSelectCellEditor',
         cellEditorParams: {
-            values: ['Ativo', 'Inativo', 'Pendente'],
+            values: ['Ativo', 'Inativo'],
         },
         cellClassRules: {
             'bg-green-200 dark:bg-teal-600': params =>

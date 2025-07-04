@@ -200,6 +200,7 @@ class ReportRepository implements ReportRepositoryInterface
 
         return Product::whereBetween('updated_at', [$inicio, $fim])
             ->select('id', 'name', 'description', 'price', 'cost_price', 'stock')
+            ->selectRaw('DATE(updated_at) as modificacao')
             ->orderByDesc('updated_at')
             ->get()
             ->toArray();
