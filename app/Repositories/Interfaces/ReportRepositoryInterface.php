@@ -12,6 +12,7 @@ interface ReportRepositoryInterface
     public function update($id, array $data): bool;
     public function delete($id): bool;
     // metodos personalizados
+    public function getVendaPedido(): array;
     public function getVendaPeriodo(): array;
     public function getVendaProduto(): array;
     public function getEntrada(): array;

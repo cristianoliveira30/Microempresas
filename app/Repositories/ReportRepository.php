@@ -43,6 +43,28 @@ class ReportRepository implements ReportRepositoryInterface
     }
 
     /**
+     * Métodos para obter pedidos concluídos dos últimos 30 dias
+     */
+    public function getVendaPedido(): array
+    {
+        $inicio = now()->subDays(30)->startOfDay();
+        $fim = now()->endOfDay();
+
+        try {
+            return Pedido::where('status', 'concluido')
+                ->whereBetween('updated_at', [$inicio, $fim])
+                ->select('id', 'alcunha', 'total', 'payment_method')
+                ->selectRaw('DATE(updated_at) as date')
+                ->orderBy('updated_at', 'desc')
+                ->get()
+                ->toArray();
+        } catch (\Exception $th) {
+            return [
+                'error' => 'Erro ao obter vendas do período: ' . $th->getMessage()
+            ];
+        }
+    }
+    /**
      * Métodos para obter venda dos últimos 30 dias
      */
     public function getVendaPeriodo(): array

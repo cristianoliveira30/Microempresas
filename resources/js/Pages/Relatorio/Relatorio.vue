@@ -9,10 +9,15 @@ import SaidaCaixa from './Partials/SaidaCaixa.vue';
 import CustoParados from './Partials/CustoParados.vue';
 import CustoEstoque from './Partials/CustoEstoque.vue';
 import HistoricoAlteracaoProdutos from './Partials/HistoricoAlteracaoProdutos.vue';
+import VendaPedido from './Partials/VendaPedido.vue';
 
 const props = defineProps({
   produtos: {
     type: Array,
+    default: () => []
+  },
+  neutros: {
+    type: Object,
     default: () => []
   },
   positivos: {
@@ -34,7 +39,23 @@ console.log('Parametros recebidos:', props.produtos, props.positivos, props.nega
                 Relatório
             </h2>
         </template>
+
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+            <h2 class="font-semibold text-xl text-yellow-500 leading-tight">
+                Relatórios
+            </h2>
+        </div>
         
+        <div>
+            <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+                <VendaPedido
+                :data="props.neutros.vendapedido" 
+                />
+            </div>
+        </div>
+
+        <SectionBorder />
+
         <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <h2 class="font-semibold text-xl text-sky-500 leading-tight">
                 Relatórios Positivos

@@ -23,6 +23,9 @@ class ReportController extends Controller
     {
         $relatorios = $this->reportService->listAll();
         return Inertia::render('Relatorio/Relatorio', [
+            'neutros' => [
+                'vendapedido' => $relatorios['vendaPedido'],
+            ],
             'positivos' => [
                 'vendaperiodo' => $relatorios['vendaPeriodo'],
                 'vendaproduto' => $relatorios['vendaProduto'],

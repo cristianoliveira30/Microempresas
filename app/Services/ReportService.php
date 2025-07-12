@@ -14,6 +14,7 @@ class ReportService
     {
         return 
         [
+            'vendaPedido'           =>  $this->reportRepository->getVendaPedido(),
             'vendaPeriodo'          =>  $this->reportRepository->getVendaPeriodo(),
             'vendaProduto'          =>  $this->reportRepository->getVendaProduto(),
             'gestaoLucro'           =>  $this->reportRepository->getGestaoLucro(),
