@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260.29 323.5">
+  <defs>
+    <style>
+      .cls-1 {
+        stroke-width: 8px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .cls-2 {
+        stroke-width: 10px;
+      }
+
+      .cls-3 {
+        font-family: ColonnaMT, 'Colonna MT';
+        font-size: 280.33px;
+      }
+    </style>
+  </defs>
+  <g id="Camada_1-2" data-name="Camada 1">
+    <g>
+      <g>
+        <polyline class="cls-1" points="96 9 23 54 23 230.54 104 285 215.47 243.5 215.47 91.11 134.95 34.74 82 65"/>
+        <polyline class="cls-1" points="76.22 44.02 136.96 5.02 237 78.63 237 220.5"/>
+      </g>
+      <polyline class="cls-2" points="214.47 243.5 214.5 263.5 138.46 292"/>
+      <polyline class="cls-2" points="239 113.29 255.29 123 255.29 192.5"/>
+      <polyline class="cls-2" points="217.5 44.5 164 5 152.5 14.5"/>
+      <polyline class="cls-2" points="21 186 6 173 6 101.5"/>
+      <polyline class="cls-2" points="58.82 256.3 48.67 269.25 5 237.56 5 210"/>
+      <text class="cls-3" transform="translate(46.44 227.69)"><tspan x="0" y="0">P</tspan></text>
+    </g>
+  </g>
+</svg>

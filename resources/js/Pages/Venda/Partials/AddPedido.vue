@@ -61,7 +61,7 @@ const enviarVenda = async () => {
                 quantity: p.quantity,
                 price: p.price
             }))
-        });
+        }, { withCredentials: true});
         listaProdutos.value = [];
         alcunhaPedido.value = '';
         console.log(response)

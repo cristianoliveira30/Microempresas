@@ -20,6 +20,8 @@ if (token) {
   console.error('CSRF token not found');
 }
 axios.defaults.withCredentials = true; // importante para cookies
+axios.defaults.xsrfCookieName = 'XSRF-TOKEN';
+axios.defaults.xsrfHeaderName = 'X-XSRF-TOKEN';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -30,8 +32,8 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .mount(el)
-            .component('apexchart', VueApexCharts);
+            .component('apexchart', VueApexCharts)
+            .mount(el);
     },
     progress: {
         color: '#4B5563',

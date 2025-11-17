@@ -62,7 +62,7 @@ const removerProduto = async (produtoId) => {
         await axios.delete(route('pedido.produto.destroy', {
             pedido: props.pedido.id,
             produto: produtoId
-        }));
+        }, { withCredentials: true}));
 
         listaProdutos.value = listaProdutos.value.filter(p => p.id !== produtoId);
         houveAlteracao.value = true;
@@ -86,7 +86,7 @@ const salvarAlcunha = async () => {
                 quantity: p.quantity,
                 price: p.price
             }))
-        });
+        }, { withCredentials: true});
         showSuccess('Alcunha atualizada!');
         houveAlteracao.value = true;
     } catch (e) {
@@ -114,7 +114,7 @@ const enviarVenda = async () => {
             }))
         };
         console.log('Payload para update:', payload);
-        const response = await axios.post(route('pedido.update', { pedido: props.pedido.id }), payload);
+        const response = await axios.post(route('pedido.update', { pedido: props.pedido.id }), payload, { withCredentials: true});
         // Atualize o total do pedido com o valor do backend
         if (response.data && response.data.venda) {
             props.pedido.total = response.data.venda.total;
@@ -146,7 +146,7 @@ const confirmarPagamento = async () => {
         const response = await axios.post(route('pedido.pagar', {id: props.pedido.id}), {
           produtos: listaProdutos.value,
           method: 'pix',
-        });
+        }, { withCredentials: true});
         if (response.data) {
             houveAlteracao.value = true; // Marca que houve alteração
             showSuccess('Sucesso', 'Pagamento via Pix confirmado.');
@@ -168,7 +168,7 @@ const confirmarPagamento = async () => {
         const response = await axios.post(route('pedido.pagar', {id: props.pedido.id}), {
           produtos: listaProdutos.value,
           method: 'cash',
-        });
+        }, { withCredentials: true});
         if (response.data) {
             houveAlteracao.value = true; // Marca que houve alteração
             showSuccess('Sucesso', `Pagamento em dinheiro confirmado. Troco: R$ ${cashData.troco.toFixed(2)}`);
@@ -197,7 +197,7 @@ const confirmarExclusaoPedido = async () => {
     if (!result.isConfirmed) return;
 
     try {
-        await axios.delete(route('pedido.destroy', props.pedido.id));
+        await axios.delete(route('pedido.destroy', props.pedido.id), { withCredentials: true});
         showSuccess('Sucesso', 'Pedido excluído com sucesso.');
         houveAlteracao.value = true; // Marca que houve alteração
         emit('fechar', houveAlteracao.value); // Emitir evento para fechar o modal

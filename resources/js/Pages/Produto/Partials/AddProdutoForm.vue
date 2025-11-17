@@ -44,7 +44,7 @@ const addProduto = async () => {
                 cost_price: form.cost_price,
                 stock: form.stock,
                 is_active: form.status == true ? 1 : 0
-            });
+            }, { withCredentials: true});
 
             showSuccess('Produto adicionado com sucesso!', 'Os dados foram adicionados com sucesso.');
             location.reload();

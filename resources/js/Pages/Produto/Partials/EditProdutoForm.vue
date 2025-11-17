@@ -42,7 +42,7 @@ const enviarAlteracoes = async () => {
 
         await axios.put(route('produtos.batchUpdate'), {
             edits: edits.value
-        });
+        }, { withCredentials: true});
 
         edits.value = []
         showSuccess('Alterações salvas!', 'Os dados foram atualizados com sucesso.')

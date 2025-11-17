@@ -6,7 +6,11 @@ import { Link } from '@inertiajs/vue3';
 <template>
     <div>
         <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
-            <ApplicationLogo class="block h-12 w-auto" />
+            <div class="shrink-0 flex">
+                <div class="flex items-center gap-3 whitespace-nowrap">
+                    <h1 class="font-large text-5xl text-slate-700 dark:text-white"><b class="font-bold animate-pulse">Platinum</b> System</h1>
+                </div>
+            </div>
 
             <h1 class="mt-8 text-2xl font-medium text-gray-900 dark:text-white">
                 Bem vindo <span class="text-sky-500">{{ $page.props.auth.user.name }}</span>
