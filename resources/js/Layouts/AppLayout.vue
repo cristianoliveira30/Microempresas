@@ -9,9 +9,13 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import axios from 'axios';
 import { showError } from '@/src/utils/alerts';
+import { type } from 'jquery';
 
 defineProps({
-    title: String,
+    title: {
+        type: String,
+        default: 'Platinum System',
+    }
 });
 
 const showingNavigationDropdown = ref(false);
