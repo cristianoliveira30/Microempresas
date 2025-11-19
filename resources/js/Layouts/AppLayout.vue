@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import ApplicationMark from '@/Components/ApplicationMark.vue';
 import Banner from '@/Components/Banner.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -9,7 +8,6 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import axios from 'axios';
 import { showError } from '@/src/utils/alerts';
-import { type } from 'jquery';
 
 defineProps({
     title: {
@@ -55,45 +53,44 @@ const logout = async () => {
                             <!-- Logo -->
                             <div class="shrink-0 flex">
                                 <Link :href="route('dashboard')" class="flex items-center gap-3 whitespace-nowrap">
-                                <img src="/assets/img/logo.svg" alt="Platinum System" class="h-[90%] w-auto">
+                                <!-- Logo para tema claro -->
+                                <img src="/assets/img/logo_light.png" alt="Platinum System"
+                                    class="h-[90%] w-auto dark:hidden">
+                                <!-- Logo para tema escuro -->
+                                <img src="/assets/img/logo_dark.png" alt="Platinum System"
+                                    class="h-[90%] w-auto hidden dark:block">
+
                                 <h1 class="text-xl sm:text-2xl font-medium text-slate-900 dark:text-white">
-                                    <b class="font-black text-sky-900">Platinum</b> System
+                                    <b class="font-black text-sky-900 dark:text-gray-400">Platinum</b> System
                                 </h1>
                                 </Link>
                             </div>
 
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <!-- LINKS DESKTOP -->
+                            <div class="hidden sm:-my-px sm:ms-10 sm:flex sm:space-x-8">
                                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </NavLink>
-                            </div>
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
                                 <NavLink :href="route('produto')" :active="route().current('produto')">
                                     Produto
                                 </NavLink>
-                            </div>
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
                                 <NavLink :href="route('relatorio')" :active="route().current('relatorio')">
                                     Relatório
                                 </NavLink>
-                            </div>
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
                                 <NavLink :href="route('venda')" :active="route().current('venda')">
                                     Venda
                                 </NavLink>
-                            </div>
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
                                 <NavLink :href="route('caixa')" :active="route().current('caixa')">
                                     Caixa
                                 </NavLink>
                             </div>
                         </div>
 
+                        <!-- DROPDOWNS (desktop) -->
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <div class="ms-3 relative">
                                 <!-- Teams Dropdown -->
@@ -219,7 +216,7 @@ const logout = async () => {
                             </div>
                         </div>
 
-                        <!-- Hamburger -->
+                        <!-- Hamburger (mobile) -->
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
                                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
@@ -239,12 +236,28 @@ const logout = async () => {
                     </div>
                 </div>
 
-                <!-- Responsive Navigation Menu -->
+                <!-- MENU RESPONSIVO (mobile) -->
                 <div :class="{ 'block': showingNavigationDropdown, 'hidden': !showingNavigationDropdown }"
                     class="sm:hidden">
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                             Dashboard
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink :href="route('produto')" :active="route().current('produto')">
+                            Produto
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink :href="route('relatorio')" :active="route().current('relatorio')">
+                            Relatório
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink :href="route('venda')" :active="route().current('venda')">
+                            Venda
+                        </ResponsiveNavLink>
+
+                        <ResponsiveNavLink :href="route('caixa')" :active="route().current('caixa')">
+                            Caixa
                         </ResponsiveNavLink>
                     </div>
 

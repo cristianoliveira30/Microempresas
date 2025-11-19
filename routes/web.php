@@ -9,12 +9,21 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return redirect()->route('login');
+    return Inertia::render('Welcome', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ]);
 });
 
-Route::get('/register', function () {
-    abort(403);
-});
+// Route::get('/', function () {
+//     return redirect()->route('login');
+// });
+
+// Route::get('/register', function () {
+//     abort(403);
+// });
 
 Route::middleware([
     'web',
@@ -38,6 +47,7 @@ Route::middleware([
     Route::post('/venda', [VendaController::class, 'store'])->name('pedido.store'); // insere pedidos
     Route::post('/venda/{pedido}', [VendaController::class, 'update'])->name('pedido.update'); // atualiza pedidos
     Route::post('/pedido/pagar/{id}', [CaixaController::class, 'pagarPedido'])->name('pedido.pagar'); // paga pedido
+    Route::delete('/caixa/pedido/{pedido}', [CaixaController::class, 'destroy'])->name('pedido.destroy'); // deleta pedidos
     Route::delete('/caixa/pedido/{pedido}/produto/{produto}', [CaixaController::class, 'destroyProdutoPedido'])->name('pedido.produto.destroy'); // deleta pedidos
 
     //tests

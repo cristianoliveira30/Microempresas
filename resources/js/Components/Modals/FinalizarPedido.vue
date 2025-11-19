@@ -121,6 +121,7 @@ const enviarVenda = async () => {
         }
         await showSuccess('Pedido atualizado!', 'As alterações foram salvas.');
         houveAlteracao.value = true; 
+        window.location.reload(); // Recarrega a página para atualizar o estado
     } catch (e) {
         console.error('Erro ao atualizar o pedido:', e);
         showError('Erro ao atualizar o pedido.');
@@ -151,7 +152,7 @@ const confirmarPagamento = async () => {
             houveAlteracao.value = true; // Marca que houve alteração
             showSuccess('Sucesso', 'Pagamento via Pix confirmado.');
             emit('fechar', houveAlteracao.value); // Emitir evento para fechar o modal
-            location.reload(); // Recarrega a página para atualizar o estado
+            window.location.reload(); // Recarrega a página para atualizar o estado
         } else {
             showError('Erro', 'Não foi possível confirmar o pagamento via Pix.');
             console.error('Resposta inesperada do servidor:', response);
@@ -173,7 +174,7 @@ const confirmarPagamento = async () => {
             houveAlteracao.value = true; // Marca que houve alteração
             showSuccess('Sucesso', `Pagamento em dinheiro confirmado. Troco: R$ ${cashData.troco.toFixed(2)}`);
             emit('fechar', houveAlteracao.value);
-            location.reload(); // Recarrega a página para atualizar o estado
+            window.location.reload(); // Recarrega a página para atualizar o estado
         }
       } catch (error) {
         console.error(error);
@@ -181,6 +182,7 @@ const confirmarPagamento = async () => {
       }
     }
   }
+  window.location.reload();
 };
 
 const confirmarExclusaoPedido = async () => {
@@ -201,6 +203,7 @@ const confirmarExclusaoPedido = async () => {
         showSuccess('Sucesso', 'Pedido excluído com sucesso.');
         houveAlteracao.value = true; // Marca que houve alteração
         emit('fechar', houveAlteracao.value); // Emitir evento para fechar o modal
+        window.location.reload();
     } catch (error) {
         console.error('Erro ao excluir pedido:', error);
         showError('Erro', 'Não foi possível excluir o pedido.');
@@ -232,7 +235,7 @@ onMounted(() => {
 
 <template>
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg w-[70%] shadow-lg">
+        <div class="bg-white dark:bg-gray-800 p-3 rounded-lg sm:w-auto md:w-[100vh] h-auto shadow-lg">
             <div class="d-flex justify-between items-center mb-4 relative">
                 <h2 class="text-xl font-bold mb-4 dark:text-white">Detalhes do Pedido #{{ pedido.id }}</h2>
                 <button @click="$emit('fechar', houveAlteracao.value)" class="absolute top-2 right-2">

@@ -38,11 +38,16 @@ const submit = async () => {
 </script>
 
 <template>
+
     <Head title="Log in" />
 
     <AuthenticationCard>
         <template #logo>
-            <img src="/assets/img/logo.svg" alt="Platinum System" class="h-[150px] w-auto">
+            <!-- Logo para tema claro -->
+            <img src="/assets/img/logo_light.png" alt="Platinum System" class="h-[150px] w-auto dark:hidden">
+
+            <!-- Logo para tema escuro -->
+            <img src="/assets/img/logo_dark.png" alt="Platinum System" class="h-[150px] w-auto hidden dark:block">
         </template>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
@@ -52,28 +57,15 @@ const submit = async () => {
         <form @submit.prevent="submit">
             <div>
                 <InputLabel for="email" value="Email" />
-                <TextInput
-                    id="email"
-                    v-model="form.email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+                <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autofocus
+                    autocomplete="username" />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
                 <InputLabel for="password" value="Senha" />
-                <TextInput
-                    id="password"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                />
+                <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" required
+                    autocomplete="current-password" />
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
@@ -85,8 +77,9 @@ const submit = async () => {
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                    Esqueceu sua senha?
+                <Link v-if="canResetPassword" :href="route('password.request')"
+                    class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
+                Esqueceu sua senha?
                 </Link>
 
                 <PrimaryButton class="ms-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
